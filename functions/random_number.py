@@ -1,4 +1,4 @@
-"""Function to create a random numbner based on time."""
+"""Function to create a random numbners."""
 
 import datetime
 import random

@@ -1,0 +1,8 @@
+*.pyc
+*.so
+*.o
+migrations/
+*.log
+*.png
+*.so
+.vscode/

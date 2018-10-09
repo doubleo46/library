@@ -1,0 +1,4 @@
+Alpha neumeric sequense generator
+
+Alpha neumeric generator start generation from '0A' or '00A' or '00000000A' depens on your need.
+to get the next value pass the previous valu to the 'generate_sequence' function.

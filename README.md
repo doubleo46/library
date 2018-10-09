@@ -7,7 +7,11 @@ functions:
   Functions folder is a bunch of useful common functions:
   
   
-    1.random_id(based on time)
+    1.random number generators.
+    2.Sequense generators.
+    3.Location cordinates manipulation.
+    4. Checksum calculation.
+
   
 MiddleWare:
 
