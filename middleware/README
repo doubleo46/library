@@ -1,0 +1,16 @@
+This middleware is intended to avoid unautherised to access to webpages.
+if we want to give access to certain pages we can define it in ''SAFE_TO_REDIRECT_URI_REGEX''
+where each entry is the value of 'request.path' seperated by '|'.
+
+
+Usage:
+	1. Copy this folder to the root folder
+	2. Add this middleware to settings
+		'root_folder_name.middleware.HandleRequests'
+
+You are good to go.
+
+PS: 'admin_login' is a custom defined URL
+
+	'/admin_login/' = request.path
+	admin_login = name of the URL
