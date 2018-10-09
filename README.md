@@ -10,7 +10,7 @@ functions:
     1.random number generators.
     2.Sequense generators.
     3.Location cordinates manipulation.
-    4. Checksum calculation.
+    4.Checksum calculation.
 
   
 MiddleWare:
