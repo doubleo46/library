@@ -1,0 +1,19 @@
+version: '3.5'
+
+services:
+  django:
+    build: .
+    command: sh run.sh
+    ports:
+      - "8046:8046"
+      - "4200:4200"
+
+  gerrit:
+    image: gerritcodereview/gerrit
+    volumes:
+       - ./gerrit_docker/git-volume:/var/gerrit/git
+       - ./gerrit_docker/index-volume:/var/gerrit/index
+       - ./gerrit_docker/cache-volume:/var/gerrit/cache
+    ports:
+       - "8081:8080"
+
