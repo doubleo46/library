@@ -9,12 +9,6 @@ ENV PYTHONUNBUFFERED 1
 # Set work directory
 WORKDIR /code
 
-
-# Copy project
-COPY  . /code/
-
-
-# Install dependencies
 RUN pip install --upgrade pip
 RUN apt update && apt install default-libmysqlclient-dev -y \
 	python3-mysqldb \
@@ -22,9 +16,18 @@ RUN apt update && apt install default-libmysqlclient-dev -y \
 	python-mysqldb \
 	build-essential \
 	curl
-RUN pip install -r nsl_vcs/requirements.txt
+
 RUN pip3 install mysqlclient
-RUN curl -sL https://deb.nodesource.com/setup_10.x | -E bash -
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get install -y nodejs
+
+# Copy project
+COPY  . /code/
+
+
+# Install dependencies
+RUN pip install -r nsl_vcs/requirements.txt
 WORKDIR /code/angular-frontend
+RUN npm install -g @angular/cli
 RUN npm install
+WORKDIR /code
