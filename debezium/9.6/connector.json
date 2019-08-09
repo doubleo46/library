@@ -1,0 +1,127 @@
+#Add connector postgres
+curl -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d '
+{
+	"name": "nsl-connector",
+	"config": {
+		"connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+		"tasks.max": "1",
+		"database.hostname": "10.11.1.185",
+		"database.port": "5432",
+		"database.user": "postgres",
+		"database.password": "postgres",
+		"database.dbname": "some_db",
+		"database.server.name": "myserver",
+		"database.whitelist": "some_db",
+		"database.history.kafka.bootstrap.servers": "kafka:9092",
+		"database.history.kafka.topic": "schema-changes.some_db"
+	}
+}'
+
+#Add connector Elastic
+curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" localhost:8083/connectors/ -d '
+{
+    "name": "elastic-sink",
+    "config": {
+        "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+        "tasks.max": "1",
+        "topics": "nsl",
+        "connection.url": "http://elastic:9200",
+        "transforms": "unwrap,key",
+        "transforms.unwrap.type": "io.debezium.transforms.UnwrapFromEnvelope",
+        "transforms.key.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
+        "transforms.key.field": "id",
+        "key.ignore": "false",
+        "type.name": "nsl"
+    }
+}'
+
+Readme
+	Create a connector for the new table with the configuration stated above. Make sure the the topic name is from the available topics.
+
+Conf through Lenses.io
+-----------------------
+#postgres connector
+tasks.max=1
+database.hostname=10.11.1.185
+database.port=5432
+database.user=postgres
+database.password=postgres
+database.dbname=some_db
+database.server.name=myserver
+database.whitelist=some_db
+"database.history.kafka.bootstrap.servers": "kafka:9092",
+database.history.kafka.topic=schema-changes.some_db
+
+
+#ELASTIC connector
+connector.class=io.confluent.connect.elasticsearch.ElasticsearchSinkConnector
+type.name=nsl
+connect.elastic.kcql:INSERT INTO indexA SELECT * FROM myserver.public.customers=
+transforms.key.field=id
+topics=myserver.public.test_table_three
+tasks.max=1
+transforms.key.type=org.apache.kafka.connect.transforms.ExtractField$Key
+name=elasticconnector_customer
+transforms=unwrap,key
+transforms.unwrap.type=io.debezium.transforms.UnwrapFromEnvelope
+connection.url=http://localhost:9200
+key.ignore=false
+
+Lenses docker
+--------------
+docker run --rm -p 3030:3030 --name=lenses-dev --net=host -e EULA="https://dl.lenses.stream/d/?id=key_from_lenses" -e SAMPLEDATA=0  landoop/kafka-lenses-dev
+
+Get indices from elastic
+------------------------
+curl -XGET "http://localhost:9200/_cat/indices"
+
+#Get connectors from connect
+curl -X GET -H "Accept:application/json" localhost:8083/connectors/nsl-connector
+
+#Delete connector
+curl -X DELETE -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/inventory-connector
+
+ 
+ Postgres replication settings
+ -----------------------------
+ SELECT pg_catalog.set_config('search_path', 'public', false);
+
+  \connect
+   some_db;
+
+
+ postgresql.conf:
+	wal_level = logical
+	max_replication_slots = 1
+	listen_addresses = '*'  
+
+pg_hba.conf:
+	# IPv4 local connections:
+	host    all             all             0.0.0.0/0            md5
+
+
+
+# MODULES
+shared_preload_libraries = 'wal2json'
+
+# REPLICATION
+wal_level = logical             # minimal, archive, hot_standby, or logical (change requires restart)
+max_wal_senders = 8             # max number of walsender processes (change requires restart)
+wal_keep_segments = 4           # in logfile segments, 16MB each; 0 disables
+#wal_sender_timeout = 60s       # in milliseconds; 0 disables
+max_replication_slots = 4       # max number of replication slots (change requires restart)
+
+PATH=/usr/lib/postgresql/9.6/bin/pg_config:$PATH
+
+WAL2JSON
+--------
+copy wal2json.so in /usr/lib/postgresql/9.6/lib
+As postgres user do this to show wal2json output
+
+sudo su postgres
+pg_recvlogical -d test --slot test_slot --create-slot -P wal2json
+pg_recvlogical -d test --slot test_slot --start -o pretty-print=1 -f -
+
+
+
+
