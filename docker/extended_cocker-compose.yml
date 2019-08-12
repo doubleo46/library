@@ -1,0 +1,52 @@
+version: '3.5'
+
+services:
+  django:
+    build: .
+    command: sh run.sh
+    ports:
+      - "8046:8046"
+      - "4200:4200"
+    depends_on:
+      - mysql
+
+  gerrit:
+    image: gerritcodereview/gerrit
+    volumes:
+       - ./gerrit_docker/git-volume:/var/gerrit/git
+       - ./gerrit_docker/index-volume:/var/gerrit/index
+       - ./gerrit_docker/cache-volume:/var/gerrit/cache
+       - ./gerrit_docker/etc-volume:/var/gerrit/etc
+       - ./gerrit_docker/db-volume:/var/gerrit/db
+    ports:
+       - "8081:8080"
+       - "29419:29418"
+
+
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    environment:
+      - node.name=es01
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./elastic_docker/elasticsearch01/data:/usr/share/elasticsearch/data
+
+    ports:
+      - "9200:9200"      
+  mysql:
+    restart: always
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'example'
+      MYSQL_DATABASE: 'nsl_vcs_db'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD : 'admin'
+
+    volumes:
+      - ./mysql_docker/my-datavolume:/var/lib/mysql
