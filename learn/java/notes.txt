@@ -1,0 +1,9 @@
+List of dto to json
+-------------------
+    List<NslCommonDto> suggestions = new ArrayList<NslCommonDto>() ; 
+		Gson gson = new Gson();
+		String json = gson.toJson(suggestions);
+    
+Converting json to a dto
+------------------------
+object = gson.fromJson(json, new TypeToken<List<NslCommonDto>>(){}.getType());
