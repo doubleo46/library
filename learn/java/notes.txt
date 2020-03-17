@@ -7,3 +7,13 @@ List of dto to json
 Converting json to a dto
 ------------------------
 object = gson.fromJson(json, new TypeToken<List<NslCommonDto>>(){}.getType());
+
+
+Creating a Json
+-----------------
+JSONObject auth = new JSONObject();
+auth.put("accesrsToken", slackToken.toString());
+
+Creating json that can object as value
+---------------------------------------
+
