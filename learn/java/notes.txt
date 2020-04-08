@@ -14,6 +14,8 @@ Creating a Json
 JSONObject auth = new JSONObject();
 auth.put("accesrsToken", slackToken.toString());
 
-Creating json that can object as value
+Converting JSONObject ot JsonNode
 ---------------------------------------
-
+JSONObject resp = new JSONObject;
+ObjectMapper objectMapper = new ObjectMapper();
+final JsonNode jsonNode = objectMapper.readTree(resp.toString());
