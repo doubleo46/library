@@ -19,3 +19,7 @@ Converting JSONObject ot JsonNode
 JSONObject resp = new JSONObject;
 ObjectMapper objectMapper = new ObjectMapper();
 final JsonNode jsonNode = objectMapper.readTree(resp.toString());
+
+adding data to jsonNode
+------------------------
+((ObjectNode)response).put("value", "NO");
