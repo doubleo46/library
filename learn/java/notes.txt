@@ -23,3 +23,9 @@ final JsonNode jsonNode = objectMapper.readTree(resp.toString());
 adding data to jsonNode
 ------------------------
 ((ObjectNode)response).put("value", "NO");
+
+String to Json
+--------------
+String responseString = exception.getResponseBodyAsString();
+JSONObject jsonObject = new JSONObject(responseString);
+logger.info("ERROR: " + jsonObject.getString("error"));
