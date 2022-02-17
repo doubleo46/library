@@ -1,0 +1,7 @@
+    def get_permissions(self):
+        """Set custom permissions for each action."""
+        if self.action in ['update', 'partial_update', 'destroy', 'list']:
+            self.permission_classes = [SomePermission, ]
+        elif self.action in ['create']:
+            self.permission_classes = [AllowAny, ]
+        return super().get_permissions()
