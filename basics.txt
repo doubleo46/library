@@ -1,0 +1,6 @@
+ 1. https://www.youtube.com/watch?v=Uszj_k0DGsg - GIT
+ 2. https://www.youtube.com/watch?v=VywxIQ2ZXw4 - Postman
+ 3. https://www.youtube.com/watch?v=cJveiktaOSQ - Restframework
+ 4. https://www.youtube.com/watch?v=pTFZFxd4hOI -  Docker
+ 5. https://www.youtube.com/watch?v=iYM2zFP3Zn0 - Http[till 11.40]
+ 6.
